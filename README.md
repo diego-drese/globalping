@@ -11,3 +11,16 @@ To start containers:
 To stop containers:
 
     docker-compose -f docker-compose-local.yml down
+
+Make de image
+
+    docker build  --no-cache -t ping ./
+
+    Tag
+    docker tag ping diegoneumann/ping:latest
+
+    Deploy image dockerhub
+
+    docker push diegoneumann/ping:latest
+
+

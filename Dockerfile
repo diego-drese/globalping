@@ -10,6 +10,7 @@ COPY . /app
 # Instalar dependências
 RUN npm install
 
+CMD rm docker-compose.yml docker-compose-local.yml
 # Expor a porta do servidor
 EXPOSE 3000
 

@@ -1,9 +1,9 @@
 version: '3.8'
 services:
   globalping:
-    build: .
-    ports:
-      - "3040:3000"
+    image: diegoneumann/ping:latest
+    #ports:
+    #  - "3040:3000"
     environment:
       - TOKEN_AUTH=Rstrsrwfgsy6543Ds_Fsdst
       - GLOBALPING_API_TOKEN=pql63pm57a5jzu4rxjl5bfh773k53l35
