@@ -119,7 +119,65 @@ app.get("/info", (req, res) => {
                     "ipVersion (opcional, padrão: 4)": "Define a versão do IP (4 ou 6). Só é necessário se o target for um domínio.",
                     "packets (opcional, padrão: 3)": "Número de pacotes a serem enviados no teste."
                 },
-                example_request: `http://${host}/test?target=google.com&country=US&limit=10&ipVersion=6&packets=5`
+                example_request: `http://${host}/test?target=google.com&country=US&limit=10&ipVersion=6&packets=5`,
+                example_response: {
+                    name: "Globalping API Response",
+                    description: "Esta é a estrutura de resposta da rota /test, que retorna os resultados de um teste de conectividade (ping).",
+                    example_request: `http://${host}/test?target=google.com`,
+                    response_structure: {
+                        id: "Identificador único do teste.",
+                        type: "Tipo de teste realizado (exemplo: 'ping').",
+                        status: "Status do teste (exemplo: 'finished', 'running').",
+                        createdAt: "Data e hora de criação do teste.",
+                        updatedAt: "Data e hora da última atualização do teste.",
+                        target: "O IP ou domínio que foi testado.",
+                        probesCount: "Número de probes (localizações) utilizadas no teste.",
+                        locations: [
+                            {
+                                country: "País de origem do teste.",
+                                limit: "Número máximo de localizações utilizadas."
+                            }
+                        ],
+                        results: [
+                            {
+                                probe: {
+                                    continent: "Continente onde o teste foi realizado.",
+                                    region: "Região geográfica do teste.",
+                                    country: "País onde o teste foi realizado.",
+                                    state: "Estado onde o teste foi realizado (se disponível).",
+                                    city: "Cidade onde o teste foi realizado.",
+                                    asn: "Número de Sistema Autônomo (ASN) da rede onde o teste foi feito.",
+                                    longitude: "Coordenada geográfica de longitude do local do teste.",
+                                    latitude: "Coordenada geográfica de latitude do local do teste.",
+                                    network: "Nome da operadora ou rede do local do teste.",
+                                    tags: "Tags adicionais sobre a rede.",
+                                    resolvers: "Lista de resolvedores DNS utilizados."
+                                },
+                                result: {
+                                    status: "Status do teste ('finished', 'failed', etc.).",
+                                    rawOutput: "Saída bruta do comando ping.",
+                                    resolvedAddress: "Endereço IP resolvido para o teste.",
+                                    resolvedHostname: "Hostname resolvido do IP (se aplicável).",
+                                    timings: [
+                                        {
+                                            ttl: "Time-To-Live (TTL) do pacote recebido.",
+                                            rtt: "Tempo de ida e volta (Round Trip Time - RTT) em milissegundos."
+                                        }
+                                    ],
+                                    stats: {
+                                        min: "Tempo mínimo de resposta (RTT mínimo).",
+                                        max: "Tempo máximo de resposta (RTT máximo).",
+                                        avg: "Tempo médio de resposta (RTT médio).",
+                                        total: "Total de pacotes enviados.",
+                                        loss: "Percentual de pacotes perdidos.",
+                                        rcv: "Número de pacotes recebidos.",
+                                        drop: "Número de pacotes descartados."
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
             },
             {
                 route: "/info",
