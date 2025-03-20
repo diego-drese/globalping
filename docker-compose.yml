@@ -5,8 +5,8 @@ services:
     #ports:
     #  - "3040:3000"
     environment:
-      - TOKEN_AUTH=XXXX
-      - GLOBALPING_API_TOKEN=XXXX
+      - TOKEN_AUTH=Rstrsrwfgsy6543Ds_Fsdst
+      - GLOBALPING_API_TOKEN=pql63pm57a5jzu4rxjl5bfh773k53l35
     deploy:
       replicas: 1
       update_config:

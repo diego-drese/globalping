@@ -101,29 +101,31 @@ async function waitForResult(measurementId, headers) {
 
 app.get("/info", (req, res) => {
     // Captura o domínio onde o serviço está hospedado
+    const protocol = req.headers.protocol || "http";
     const host = req.headers.host || "localhost:3000";
 
     const apiInfo = {
         name: "Globalping API Service",
         description: "Este serviço permite testar a conectividade de IPs e domínios utilizando a API Globalping.",
-        documentation: `http://${host}/info`,
+        documentation: `${protocol}://${host}/info`,
         endpoints: [
             {
                 route: "/test",
                 method: "GET",
                 description: "Executa um teste de conectividade (ping) para um IP ou domínio.",
                 parameters: {
+                    "token (obrigatório)": "Token de autenticação",
                     "target (obrigatório)": "Endereço IP ou domínio a ser testado.",
                     "country (opcional, padrão: BR)": "Define o país de origem do teste.",
                     "limit (opcional, padrão: 5)": "Número máximo de localidades para executar o teste.",
                     "ipVersion (opcional, padrão: 4)": "Define a versão do IP (4 ou 6). Só é necessário se o target for um domínio.",
                     "packets (opcional, padrão: 3)": "Número de pacotes a serem enviados no teste."
                 },
-                example_request: `http://${host}/test?target=google.com&country=US&limit=10&ipVersion=6&packets=5`,
+                example_request: `${protocol}://${host}/test?target=google.com&country=US&limit=10&ipVersion=6&packets=5`,
                 example_response: {
                     name: "Globalping API Response",
                     description: "Esta é a estrutura de resposta da rota /test, que retorna os resultados de um teste de conectividade (ping).",
-                    example_request: `http://${host}/test?target=google.com`,
+                    example_request: `${protocol}://${host}/test?target=google.com`,
                     response_structure: {
                         id: "Identificador único do teste.",
                         type: "Tipo de teste realizado (exemplo: 'ping').",
