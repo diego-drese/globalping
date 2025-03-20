@@ -1,6 +1,9 @@
 # Usar a imagem oficial do Node.js
 FROM node:18-alpine
 
+# Instala curl e outras dependências essenciais
+RUN apk add --no-cache curl
+
 # Definir diretório de trabalho dentro do container
 WORKDIR /app
 

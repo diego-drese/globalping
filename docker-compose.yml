@@ -1,9 +1,38 @@
 version: '3.8'
 services:
-  globalping:
+  ping:
     image: diegoneumann/ping:latest
     #ports:
     #  - "3040:3000"
     environment:
-      - TOKEN_AUTH=Rstrsrwfgsy6543Ds_Fsdst
-      - GLOBALPING_API_TOKEN=pql63pm57a5jzu4rxjl5bfh773k53l35
+      - TOKEN_AUTH=XXXX
+      - GLOBALPING_API_TOKEN=XXXX
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        parallelism: 1
+        delay: 10s
+      placement:
+        constraints: [ node.role == worker ]
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 2024M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/info" ]
+      timeout: 3s
+      interval: 10s
+      retries: 30
+      start_period: 15s
+    networks:
+      - public
+
+networks:
+  public:
+    external: true
+    name: public
