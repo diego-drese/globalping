@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  globalping:
+    build: .
+    ports:
+      - "3040:3000"
+    environment:
+      - GLOBALPING_API_TOKEN=${GLOBALPING_API_TOKEN}
