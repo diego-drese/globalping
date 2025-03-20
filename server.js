@@ -99,6 +99,43 @@ async function waitForResult(measurementId, headers) {
     }
 }
 
+app.get("/info", (req, res) => {
+    // Captura o domínio onde o serviço está hospedado
+    const host = req.headers.host || "localhost:3000";
+
+    const apiInfo = {
+        name: "Globalping API Service",
+        description: "Este serviço permite testar a conectividade de IPs e domínios utilizando a API Globalping.",
+        documentation: `http://${host}/info`,
+        endpoints: [
+            {
+                route: "/test",
+                method: "GET",
+                description: "Executa um teste de conectividade (ping) para um IP ou domínio.",
+                parameters: {
+                    "target (obrigatório)": "Endereço IP ou domínio a ser testado.",
+                    "country (opcional, padrão: BR)": "Define o país de origem do teste.",
+                    "limit (opcional, padrão: 5)": "Número máximo de localidades para executar o teste.",
+                    "ipVersion (opcional, padrão: 4)": "Define a versão do IP (4 ou 6). Só é necessário se o target for um domínio.",
+                    "packets (opcional, padrão: 3)": "Número de pacotes a serem enviados no teste."
+                },
+                example_request: `http://${host}/test?target=google.com&country=US&limit=10&ipVersion=6&packets=5`
+            },
+            {
+                route: "/info",
+                method: "GET",
+                description: "Retorna informações sobre a API e como utilizá-la."
+            }
+        ],
+        environment: {
+            GLOBALPING_API_TOKEN: process.env.GLOBALPING_API_TOKEN ? "Definido ✅" : "Não definido ❌",
+            TOKEN_AUTH: process.env.TOKEN_AUTH ? "Definido ✅" : "Não definido ❌"
+        }
+    };
+
+    res.json(apiInfo);
+});
+
 app.listen(3000, () => {
     console.log("Servidor rodando na porta 3000 🚀");
 });
