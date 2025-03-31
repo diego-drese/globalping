@@ -32,6 +32,7 @@ app.get("/test", async (req, res) => {
             limit,
             ipVersion,
             packets,
+            format
         } = req.query;
 
         if(token!==TOKEN_AUTH){
@@ -45,6 +46,7 @@ app.get("/test", async (req, res) => {
         const { isIPv4, isIPv6, isDomain } = isValidTarget(target);
         const selectedCountry = country || "BR";
         const selectedLimit = limit || 10;
+        const selectedFormat = format || 'default'
         const selectedIpVersion = ipVersion || 4;
         const selectedPackets = packets || 3;
 
@@ -74,6 +76,20 @@ app.get("/test", async (req, res) => {
         console.log(`Teste iniciado para ${target}, MEASUREMENT: ${id}` , JSON.stringify({'request':reqData, 'response': response.data}));
 
         const result = await waitForResult(id, headers);
+        if (selectedFormat === "zabbix") {
+            const simplified = result.results.map(r => ({
+                target: result.target,
+                ip: r.result.resolvedAddress,
+                host: r.result.resolvedHostname,
+                country: r.probe.country,
+                city: r.probe.city,
+                network: r.probe.network,
+                avg_rtt: r.result.stats.avg,
+                packet_loss: r.result.stats.loss
+            }));
+            return res.json(simplified);
+        }
+
         res.json(result);
     } catch (error) {
         console.error("Erro ao iniciar teste:", error.response?.data || error.message);
