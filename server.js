@@ -83,6 +83,8 @@ app.get("/test", async (req, res) => {
                 host: r.result.resolvedHostname,
                 country: r.probe.country,
                 city: r.probe.city,
+                latitude: r.probe.latitude,
+                longitude: r.probe.longitude,
                 network: r.probe.network,
                 avg_rtt: r.result.stats.avg,
                 packet_loss: r.result.stats.loss
