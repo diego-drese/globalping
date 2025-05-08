@@ -29,6 +29,7 @@ app.get("/test", async (req, res) => {
             target,
             token,
             country,
+            cities,
             limit,
             ipVersion,
             packets,
@@ -64,12 +65,23 @@ app.get("/test", async (req, res) => {
         }
 
         const headers = API_TOKEN ? { Authorization: `Bearer ${API_TOKEN}` } : {};
+        let locations = [];
+
+        if (Array.isArray(cities)) {
+            locations = cities.map(city => ({ country: selectedCountry, city }));
+        } else if (cities) {
+            locations = [{ country: selectedCountry, city: cities }];
+        } else {
+            locations = [{ country: selectedCountry, limit: parseInt(selectedLimit) }];
+        }
+
         const reqData = {
             type: "ping",
             target: target,
-            locations: [{ country:selectedCountry, limit: parseInt(selectedLimit) }],
+            locations: locations,
             measurementOptions
         };
+        console.log(`Teste iniciado para ${target}` , JSON.stringify({'request':reqData}));
         const response = await axios.post(GLOBALPING_API, reqData, { headers });
 
         const { id } = response.data;
