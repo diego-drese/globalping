@@ -88,20 +88,33 @@ app.get("/test", async (req, res) => {
         console.log(`Teste iniciado para ${target}, MEASUREMENT: ${id}` , JSON.stringify({'request':reqData, 'response': response.data}));
 
         const result = await waitForResult(id, headers);
+        const simplified = result.results.map(r => ({
+            target: result.target,
+            ip: r.result.resolvedAddress,
+            host: r.result.resolvedHostname,
+            country: r.probe.country,
+            city: r.probe.city,
+            latitude: r.probe.latitude,
+            longitude: r.probe.longitude,
+            network: r.probe.network,
+            avg_rtt: r.result.stats.avg,
+            packet_loss: r.result.stats.loss
+        }));
+
         if (selectedFormat === "zabbix") {
-            const simplified = result.results.map(r => ({
-                target: result.target,
-                ip: r.result.resolvedAddress,
-                host: r.result.resolvedHostname,
-                country: r.probe.country,
-                city: r.probe.city,
-                latitude: r.probe.latitude,
-                longitude: r.probe.longitude,
-                network: r.probe.network,
-                avg_rtt: r.result.stats.avg,
-                packet_loss: r.result.stats.loss
-            }));
             return res.json(simplified);
+        }
+
+        if (selectedFormat === "csv") {
+            const fields = Object.keys(simplified[0] || {});
+            const csv = [
+                fields.join(","), // Cabeçalho
+                ...simplified.map(obj => fields.map(f => `"${(obj[f] ?? "")}"`).join(","))
+            ].join("\n");
+
+            res.setHeader("Content-Type", "text/csv");
+            res.setHeader("Content-Disposition", `attachment; filename="ping-result-${Date.now()}.csv"`);
+            return res.send(csv);
         }
 
         res.json(result);
